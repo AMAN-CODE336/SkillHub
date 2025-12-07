@@ -46,6 +46,6 @@ export const getCourseById = async (req, res) => {
 
     res.json(course);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch course details" });
+    res.status(500).json({ message: "Fail to fetch course details" });
   }
 };
