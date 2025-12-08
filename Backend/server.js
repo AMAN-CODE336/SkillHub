@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userroutes.js";
 import enrollmentRoutes from "./routes/enrollmentRoutes.js"
 import { errorHandler } from "./middlewares/errorMiddleware.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/course" , courseRoutes)
 app.use("/api/enroll" , enrollmentRoutes )
+app.use("/api/payment", paymentRoutes);
 
 // Test route
 app.get("/", (req, res) => {
