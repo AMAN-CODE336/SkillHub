@@ -6,7 +6,8 @@ export default function ManageCourses() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    price: ""
+    price: "",
+    category: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,38 +29,54 @@ export default function ManageCourses() {
 
   // Create course
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      const res = await axiosClient.post("/course/", form);
+  if (
+    !form.title.trim() ||
+    !form.description.trim() ||
+    !form.category.trim()
+  ) {
+    alert("Title, description and category are required");
+    return;
+  }
 
-      alert("Course created!");
-      setForm({ title: "", description: "", price: "" });
-      loadCourses();
-    } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.message || "Creation failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+
+    await axiosClient.post("/course/create", {
+      title: form.title.trim(),
+      description: form.description.trim(),
+      price: Number(form.price),
+      category: form.category.trim()
+    });
+
+    alert("Course created successfully");
+    setForm({ title: "", description: "", price: "", category: "" });
+    loadCourses();
+  } catch (err) {
+    alert(err.response?.data?.message || "Course creation failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
     <div className="p-6">
-
       <h1 className="text-3xl font-bold mb-6">Manage Courses</h1>
 
       {/* COURSE CREATION FORM */}
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg bg-white p-4 rounded shadow mb-10">
-
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 max-w-lg bg-white p-4 rounded shadow mb-10"
+      >
         <input
           name="title"
           placeholder="Course Title"
@@ -72,6 +89,14 @@ export default function ManageCourses() {
           name="description"
           placeholder="Course Description"
           value={form.description}
+          onChange={handleChange}
+          className="w-full p-3 border rounded"
+        />
+
+        <input
+          name="category"
+          placeholder="Course Category"
+          value={form.category}
           onChange={handleChange}
           className="w-full p-3 border rounded"
         />
@@ -91,7 +116,6 @@ export default function ManageCourses() {
         >
           {loading ? "Creating..." : "Create Course"}
         </button>
-
       </form>
 
       {/* COURSE LIST */}
@@ -106,7 +130,6 @@ export default function ManageCourses() {
           </div>
         ))}
       </div>
-
     </div>
   );
 }

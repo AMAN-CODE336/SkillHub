@@ -20,20 +20,23 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axiosClient.post("/auth/login", form);
+  e.preventDefault();
+  try {
+    const res = await axiosClient.post("/auth/login", form);
 
-      setUser(res.data.user);
+    setUser(res.data.user);
 
-      alert("Login successful!");
-      navigate("/");
+    localStorage.setItem("token", res.data.token);
 
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Login failed");
-    }
-  };
+    alert("Login successful!");
+    navigate("/");
+
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
+
 
   return (
     <div className="p-6 max-w-md mx-auto">
