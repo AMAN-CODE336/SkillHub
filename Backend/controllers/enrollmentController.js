@@ -33,3 +33,16 @@ export const enrollCourse = async (req, res) => {
     res.status(500).json({ message: "Enrollment failed" });
   }
 };
+
+
+export const getMyCourses = async (req, res) => {
+  try {
+    const enrollments = await Enrollment.find({
+      user: req.user._id,
+    }).populate("course");
+
+    res.json(enrollments);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch enrolled courses" });
+  }
+};

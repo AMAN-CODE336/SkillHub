@@ -1,10 +1,21 @@
 import { create } from "zustand";
 
-const useAuth = create((set) => ({
-  user: null,
+const storedUser = localStorage.getItem("user");
 
-  setUser: (userData) => set({ user: userData }),
-  logout: () => set({ user: null })
+const useAuth = create((set) => ({
+  // restore user on app load
+  user: storedUser ? JSON.parse(storedUser) : null,
+
+  setUser: (user) => {
+    set({ user });
+    localStorage.setItem("user", JSON.stringify(user));
+  },
+
+  logout: () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    set({ user: null });
+  }
 }));
 
 export default useAuth;

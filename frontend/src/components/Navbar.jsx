@@ -29,7 +29,8 @@ export default function Navbar() {
     <span className="font-medium text-gray-600">
       Hi, {user.name}
     </span>
-<Link to="/my-courses">My Courses</Link>
+{user && user.role !== "admin" &&  ( <Link to="/my-courses">My Courses</Link>
+ )}
 
     {/* Show only ONE dashboard depending on role */}
     {user.role === "admin" ? (
